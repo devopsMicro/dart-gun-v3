@@ -161,6 +161,10 @@ pins.digitalWritePin(DigitalPin.P0, 1)
 pins.setPull(DigitalPin.P1, PinPullMode.PullUp)
 pins.setPull(DigitalPin.P8, PinPullMode.PullUp)
 pins.setPull(DigitalPin.P2, PinPullMode.PullUp)
+pins.setPull(DigitalPin.P9, PinPullMode.PullUp)
+pins.setPull(DigitalPin.P13, PinPullMode.PullUp)
+// Need time for pull up to take effect
+basic.pause(100)
 basic.showLeds(`
     . . . . .
     . . . . .
@@ -168,19 +172,43 @@ basic.showLeds(`
     . . . . .
     . . # . .
     `)
+radio.setGroup(10)
 strip = neopixel.create(DigitalPin.P14, 57, NeoPixelMode.RGB_RGB)
 ControlLeds = strip.range(0, 2)
 BarelLeds = strip.range(2, 55)
 NumberOfSteps = 200
-// 80 For board A 
-// 80 for board B
-LoadAngle = 80
-// 99 For board A
-// 101 for board B
-FireAngle = 101
-// FullSpeedValue for blue darts = 84
-FullSpeedValue = 84
-radio.setGroup(10)
+basic.showString("BOARD")
+if (1 == pins.digitalReadPin(DigitalPin.P9)) {
+    basic.showString("A")
+    // 80 For board A 
+    // 80 for board B
+    LoadAngle = 80
+    // 99 For board A
+    // 101 for board B
+    FireAngle = 99
+    basic.pause(500)
+} else {
+    basic.showString("B")
+    // 80 For board A 
+    // 80 for board B
+    LoadAngle = 80
+    // 99 For board A
+    // 101 for board B
+    FireAngle = 101
+    basic.pause(500)
+}
+basic.showString("DART")
+if (1 == pins.digitalReadPin(DigitalPin.P13)) {
+    basic.showString("B")
+    // FullSpeedValue for blue darts = 84
+    FullSpeedValue = 84
+    basic.pause(500)
+} else {
+    basic.showString("R")
+    // FullSpeedValue for blue darts = 84
+    FullSpeedValue = 70
+    basic.pause(500)
+}
 InitSpeed = 0
 InStandby = 1
 let AtSpeed = 2
